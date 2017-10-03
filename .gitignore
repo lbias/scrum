@@ -1,0 +1,9 @@
+
+*.py[co]
+*.DS_Store
+_build/
+db.sqlite3
+geckodriver.log
+*.pyc
+__pycache__
+.DS_Store
