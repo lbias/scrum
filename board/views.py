@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 
-from rest_framework import authentication, permissions, viewsets
+from rest_framework import authentication, permissions, viewsets, filters
 
 from .models import Sprint, Task
 from .serializers import SprintSerializer, TaskSerializer, UserSerializer
@@ -10,6 +10,7 @@ User = get_user_model()
 class DefaultsMixin(object):
     """Default settings for view authentication, permissions,
     filtering and pagination."""
+
     authentication_classes = (
         authentication.BasicAuthentication,
         authentication.TokenAuthentication,
@@ -20,6 +21,11 @@ class DefaultsMixin(object):
     paginate_by = 25
     paginate_by_param = 'page_size'
     max_paginate_by = 100
+    filter_backends = (
+        filters.DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    )
 
 class SprintViewSet(DefaultsMixin, viewsets.ModelViewSet):
     """API endpoint for listing and creating sprints."""
