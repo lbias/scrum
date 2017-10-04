@@ -1,3 +1,5 @@
+from django.contrib.auth import get_user_model
+
 from rest_framework import serializers
 
 from .models import Sprint, Task
@@ -18,3 +20,10 @@ class TaskSerializer(serializers.ModelSerializer):
 
     def get_status_display(self, obj):
         return obj.get_status_display()
+
+class UserSerializer(serializers.ModelSerializer):
+    full_name = serializers.CharField(source='get_full_name', read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('id', User.USERNAME_FIELD, 'full_name', 'is_active', )
