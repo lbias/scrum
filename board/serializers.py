@@ -8,9 +8,11 @@ from .models import Sprint, Task
 User = get_user_model()
 
 class SprintSerializer(serializers.ModelSerializer):
+    links = serializers.SerializerMethodField()
+
     class Meta:
         model = Sprint
-        fields = ('id', 'name', 'description', 'end', 'link', )
+        fields = ('id', 'name', 'description', 'end', 'links', )
 
     def get_links(self, obj):
         request = self.context['request']
@@ -21,9 +23,9 @@ class SprintSerializer(serializers.ModelSerializer):
 
 class TaskSerializer(serializers.ModelSerializer):
     assigned = serializers.SlugRelatedField(
-        slug_field=User.USERNAME_FIELD, required=False)
-    status_display = serializers.SerializerMethodField('get_status_display')
-    links = serializers.SerializerMethodField('get_links')
+        slug_field=User.USERNAME_FIELD, required=False, read_only=True)
+    status_display = serializers.SerializerMethodField()
+    links = serializers.SerializerMethodField()
     class Meta:
         model = Task
         fields = ('id', 'name', 'description', 'sprint', 'status', 'status_display', 'order',
