@@ -33,7 +33,20 @@
         username: $(':input[name="username"]', this.form).val(),
         password: $(':input[name="password"]', this.form).val()
       };
-      // TODO: Submit the login form
+      $.post(app.apiLogin, data)
+        .success($.proxy(this.loginSuccess, this))
+        .fail($.proxy(this.loginFailure, this));
+    },
+    loginSuccess: function (data) {
+      app.session.save(data.token);
+      this.trigger('login', data.token);
+    },
+    loginFailure: function (xhr, status, error) {
+      var errors = xhr.responseJSON;
+      this.showErrors(errors);
+    },
+    showErrors: function (errors) {
+      // TODO: Show the errors from the response
     }
   });
 
