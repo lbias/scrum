@@ -5,6 +5,7 @@
     },
     initialize: function (options) {
       this.options = options;
+      $.ajaxPrefilter($.proxy(this._setupAuth, this));
       this.load();
     },
     load: function () {
@@ -26,6 +27,14 @@
     },
     authenticated: function () {
       return this.get('token') !== null;
+    }
+    _setupAuth: function (settings, originalOptions, xhr) {
+      if (this.authenticated()) {
+        xhr.setRequestHeader(
+          'Authorization',
+          'Token ' + this.get('token')
+        );
+      }
     }
   });
   app.session = new Session();
