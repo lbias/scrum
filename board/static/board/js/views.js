@@ -22,6 +22,19 @@
   var LoginView = TemplateView.extend({
     id: 'login',
     templateName: '#login-template',
+    events: {
+      'submit form': 'submit'
+    },
+    submit: function (event) {
+      var data = {};
+      event.preventDefault();
+      this.form = $(event.currentTarget);
+      data={
+        username: $(':input[name="username"]', this.form).val(),
+        password: $(':input[name="password"]', this.form).val()
+      };
+      // TODO: Submit the login form
+    }
   });
 
   app.views.HomepageView = HomepageView;
