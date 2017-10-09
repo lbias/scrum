@@ -72,5 +72,35 @@
       }
     }
   });
+
   app.session = new Session();
+
+  app.models.Sprint = Backbone.Model.extend({});
+
+  app.models.Task = Backbone.Model.extend({});
+
+  app.models.User = Backbone.Model.extend({});
+
+  app.collections.ready = $.getJSON(app.apiRoot);
+  app.collections.ready.done(function (data) {
+      app.collections.Sprints = BaseCollection.extend({
+          model: app.models.Sprint,
+          url: data.sprints
+      });
+      app.sprints = new app.collections.Sprints();
+      app.collections.Tasks = BaseCollection.extend({
+          model: app.models.Task,
+          url: data.tasks,
+          getBacklog: function () {
+              this.fetch({remove: false, data: {backlog: 'True'}});
+          }
+      });
+      app.tasks = new app.collections.Tasks();
+      app.collections.Users = BaseCollection.extend({
+          model: app.models.User,
+          url: data.users
+      });
+      app.users = new app.collections.Users();
+  });
+    
 })(jQuery, Backbone, _, app);
